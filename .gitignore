@@ -15,6 +15,12 @@ __pycache__/
 venv/
 ENV/
 
+# Packaging
+*.egg-info/
+dist/
+build/
+*.egg
+
 # System Files
 Thumbs.db
 db.json

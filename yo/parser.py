@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from typing import List, Any, Optional
-from errors import InvalidSyntax
-from lexer import Token
+from .errors import InvalidSyntax
+from .lexer import Token
 
 @dataclass
 class ASTNode:

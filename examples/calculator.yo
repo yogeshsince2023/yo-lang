@@ -1,0 +1,33 @@
+# ========================
+# Calculator — Math with tasks
+# ========================
+
+task add(a, b) {
+    return a + b
+}
+
+task subtract(a, b) {
+    return a - b
+}
+
+task multiply(a, b) {
+    return a * b
+}
+
+task divide(a, b) {
+    when b == 0 {
+        say "Error: Cannot divide by zero!"
+        return 0
+    }
+    return a / b
+}
+
+make x = 15
+make y = 4
+
+say "Calculator Results:"
+say "─────────────────"
+say x + " + " + y + " = " + add(x, y)
+say x + " - " + y + " = " + subtract(x, y)
+say x + " * " + y + " = " + multiply(x, y)
+say x + " / " + y + " = " + divide(x, y)

@@ -1,10 +1,10 @@
 import sys
 import os
-from lexer import Lexer
-from parser import Parser
-from interpreter import Interpreter
-from environment import Environment
-from errors import YOError
+from .lexer import Lexer
+from .parser import Parser
+from .interpreter import Interpreter
+from .environment import Environment
+from .errors import YOError
 
 def print_usage():
     print("YO Language v1.0")
@@ -16,7 +16,7 @@ def start_repl():
     
     global_env = Environment()
     interpreter = Interpreter()
-    import errors
+    from . import errors
     
     while True:
         try:
@@ -78,7 +78,7 @@ def main():
         print(f"Error reading file '{filename}': {e}")
         sys.exit(1)
 
-    import errors
+    from . import errors
     errors.CURRENT_SOURCE = source
     errors.CURRENT_FILENAME = filename
 

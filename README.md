@@ -41,7 +41,7 @@ say greeting
 Declares a new variable. Reassign variables without the `make` keyword.
 ```yolang
 make name = "Yogesh"
-name = "Yogesh Kumar"
+name = "Yogesh Taparia"
 ```
 
 ### 2. Print Output (`say`)

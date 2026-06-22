@@ -1,0 +1,14 @@
+# Factorial calculation in YO
+
+task factorial(n) {
+    make result = 1
+    make i = 1
+    repeat i <= n {
+        make result = result * i
+        make i = i + 1
+    }
+    return result
+}
+
+say "Factorial of 5 is:"
+say factorial(5)

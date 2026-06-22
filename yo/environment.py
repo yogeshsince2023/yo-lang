@@ -1,5 +1,5 @@
 import difflib
-from errors import UndefinedVariable
+from .errors import UndefinedVariable
 
 class Environment:
     def __init__(self, parent=None):

@@ -1,0 +1,27 @@
+# ========================
+# FizzBuzz — The classic interview problem
+# ========================
+
+say "FizzBuzz from 1 to 30:"
+say "─────────────────────"
+
+make i = 1
+repeat i <= 30 {
+    when i % 15 == 0 {
+        say i + " → FizzBuzz"
+    }
+    when i % 15 != 0 {
+        when i % 3 == 0 {
+            say i + " → Fizz"
+        }
+        when i % 3 != 0 {
+            when i % 5 == 0 {
+                say i + " → Buzz"
+            }
+            when i % 5 != 0 {
+                say i
+            }
+        }
+    }
+    make i = i + 1
+}

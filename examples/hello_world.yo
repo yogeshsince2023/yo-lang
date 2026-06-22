@@ -1,0 +1,12 @@
+# ========================
+# Hello World — Your first YO program
+# ========================
+
+say "Hello, World!"
+say "Welcome to YO language 🚀"
+
+make name = "Yogesh"
+say "My name is " + name
+
+make age = 20
+say name + " is " + age + " years old"

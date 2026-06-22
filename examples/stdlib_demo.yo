@@ -1,0 +1,40 @@
+# ========================
+# Standard Library Demo — math, text, list
+# ========================
+
+use math
+use text
+use list
+
+# ── Math Library ──
+say "🔢 Math Library"
+say "───────────────"
+say "round(3.7)  = " + math.round(3.7)
+say "floor(4.9)  = " + math.floor(4.9)
+say "ceil(2.1)   = " + math.ceil(2.1)
+say "abs(-42)    = " + math.abs(-42)
+say "max(7, 13)  = " + math.max(7, 13)
+say "min(7, 13)  = " + math.min(7, 13)
+say "power(2, 8) = " + math.power(2, 8)
+say ""
+
+# ── Text Library ──
+make word = "yo language"
+say "📝 Text Library"
+say "───────────────"
+say "upper    = " + text.upper(word)
+say "lower    = " + text.lower(word)
+say "length   = " + text.length(word)
+say "reverse  = " + text.reverse(word)
+say "has 'yo' = " + text.has(word, "yo")
+say ""
+
+# ── List Library ──
+make nums = [9, 3, 7, 1, 5]
+say "📋 List Library"
+say "───────────────"
+say "original = " + nums
+say "sorted   = " + list.sort(nums)
+say "reversed = " + list.reverse(nums)
+say "count    = " + list.count(nums)
+say "sum      = " + list.sum(nums)

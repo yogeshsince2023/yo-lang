@@ -1,0 +1,15 @@
+# Fibonacci Sequence in YO
+
+make n1 = 0
+make n2 = 1
+make count = 0
+make terms = 10
+
+say "Fibonacci sequence:"
+repeat count < terms {
+    say n1
+    make nth = n1 + n2
+    make n1 = n2
+    make n2 = nth
+    make count = count + 1
+}

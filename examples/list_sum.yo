@@ -1,0 +1,16 @@
+# List operations in YO
+
+make numbers = [10, 20, 30, 40, 50]
+say "Original list:"
+say numbers
+
+make sum = 0
+for each num in numbers {
+    make sum = sum + num
+}
+
+say "Sum of all numbers:"
+say sum
+
+say "Count of numbers:"
+say list.count(numbers)

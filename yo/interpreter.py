@@ -1,9 +1,9 @@
 import sys
 import importlib
 from typing import Any
-from errors import YOError, UndefinedVariable, TypeMismatch, DivisionByZero
-from environment import Environment
-from parser import (
+from .errors import YOError, UndefinedVariable, TypeMismatch, DivisionByZero
+from .environment import Environment
+from .parser import (
     Program, VarDecl, SayStmt, AskExpr, WhenStmt, RepeatStmt,
     ForEachStmt, TaskDecl, CallExpr, ReturnStmt, UseStmt,
     AssignStmt, BinaryExpr, UnaryExpr, LiteralExpr, IdentifierExpr, ListExpr
@@ -128,13 +128,16 @@ class Interpreter:
         elif node_type == "UseStmt":
             libname = node.libname
             try:
-                # Ensure the current directory is in path
-                if "." not in sys.path:
-                    sys.path.insert(0, ".")
-                module = importlib.import_module(f"stdlib.{libname}_lib")
+                import os
+                package_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+                if package_root not in sys.path:
+                    sys.path.insert(0, package_root)
+                module = importlib.import_module(f"yo.stdlib.{libname}_lib")
             except ImportError as e:
-                # Raise general YOError for loading failure
-                raise YOError(f"Could not load library stdlib/{libname}_lib.py: {e}")
+                try:
+                    module = importlib.import_module(f"stdlib.{libname}_lib")
+                except ImportError:
+                    raise YOError(f"Could not load library yo/stdlib/{libname}_lib.py: {e}")
                 
             lib_dict_name = f"{libname.upper()}_LIB"
             if hasattr(module, lib_dict_name):
