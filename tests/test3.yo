@@ -1,0 +1,13 @@
+use math
+use text
+use list
+
+make nums = [5, 3, 8, 1, 9, 2]
+say math.round(3.7)
+say list.sort(nums)
+say list.count(nums)
+
+make word = "yogesh"
+say text.upper(word)
+say text.length(word)
+say text.has(word, "yo")

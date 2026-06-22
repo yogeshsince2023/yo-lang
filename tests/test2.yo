@@ -1,0 +1,15 @@
+task add(a, b) {
+    return a + b
+}
+
+task greet(person) {
+    say "Hello, " + person + "!"
+}
+
+make result = add(10, 25)
+say result
+greet("Yogesh")
+
+for each num in [1, 2, 3, 4, 5] {
+    say num
+}
