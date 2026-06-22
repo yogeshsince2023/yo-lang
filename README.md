@@ -168,7 +168,7 @@ yo-lang/
 ---
 
 ## 🎓 Built By
-*   **Yogesh** - UEM Jaipur CSE
+*   **Yogesh Taparia** - UEM Jaipur CSE
 
 ---
 
