@@ -1,10 +1,5 @@
 ﻿{
   "rewrites": [
-    { "source": "/(.*)", "destination": "/playground/app" }
-  ],
-  "functions": {
-    "playground/app.py": {
-      "maxDuration": 10
-    }
-  }
+    { "source": "/(.*)", "destination": "/api/index.py" }
+  ]
 }
