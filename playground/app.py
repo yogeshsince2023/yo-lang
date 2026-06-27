@@ -18,7 +18,8 @@ app = Flask(__name__)
 @app.route("/")
 def index():
     """Serve the playground HTML page."""
-    return send_file("index.html")
+    html_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "index.html")
+    return send_file(html_path)
 
 
 @app.route("/run", methods=["POST"])

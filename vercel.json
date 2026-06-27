@@ -1,0 +1,20 @@
+﻿{
+  "version": 2,
+  "builds": [
+    {
+      "src": "playground/app.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "playground/app.py"
+    }
+  ],
+  "functions": {
+    "playground/app.py": {
+      "maxDuration": 10
+    }
+  }
+}
