@@ -29,6 +29,3 @@ Homepage = "https://github.com/yogeshsince2023/yo-lang"
 
 [project.scripts]
 yo = "yo.yo:main"
-
-[tool.vercel]
-entrypoint = "playground/app.py"

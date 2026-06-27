@@ -1,4 +1,4 @@
-﻿"""
+"""
 YO Language Playground — Flask API (Vercel entrypoint)
 Runs YO code and returns captured output.
 """
