@@ -1,16 +1,6 @@
 ﻿{
-  "version": 2,
-  "builds": [
-    {
-      "src": "playground/app.py",
-      "use": "@vercel/python"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "playground/app.py"
-    }
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/playground/app" }
   ],
   "functions": {
     "playground/app.py": {
