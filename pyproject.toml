@@ -2,8 +2,8 @@
 requires = ["setuptools>=42", "wheel"]
 build-backend = "setuptools.build_meta"
 
-[tool.setuptools.packages.find]
-include = ["yo", "yo.*"]
+[tool.setuptools]
+packages = ["yo", "yo.stdlib"]
 
 [project]
 name = "yo-lang"
