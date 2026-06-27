@@ -4,9 +4,7 @@ from typing import Any
 from .errors import YOError, UndefinedVariable, TypeMismatch, DivisionByZero
 from .environment import Environment
 from .parser import (
-    Program, VarDecl, SayStmt, AskExpr, WhenStmt, RepeatStmt,
-    ForEachStmt, TaskDecl, CallExpr, ReturnStmt, UseStmt,
-    AssignStmt, BinaryExpr, UnaryExpr, LiteralExpr, IdentifierExpr, ListExpr
+    TaskDecl
 )
 
 class ReturnSignal(Exception):
@@ -144,7 +142,8 @@ class Interpreter:
                 lib_dict = getattr(module, lib_dict_name)
                 for func_name, func in lib_dict.items():
                     # Wrap function to forward unpacked arguments as a tuple to the list-based lambda
-                    wrapped_func = lambda *args, f=func: f(args)
+                    def wrapped_func(*args, f=func):
+                        return f(args)
                     env.define(f"{libname}.{func_name}", wrapped_func)
             else:
                 # Expose public callable attributes in namespace
@@ -253,7 +252,7 @@ class Interpreter:
                 is_num_right = isinstance(right, (int, float)) and not isinstance(right, bool)
                 if is_num_left and is_num_right:
                     pass
-                elif type(left) != type(right):
+                elif not isinstance(left, type(right)):
                     raise TypeMismatch(get_yo_type(left), get_yo_type(right), node.line)
                 if node.op == ">":
                     return left > right

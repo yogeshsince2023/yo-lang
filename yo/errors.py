@@ -9,6 +9,15 @@ colorama.init(autoreset=True)
 CURRENT_SOURCE = None
 CURRENT_FILENAME = None
 
+# Flag to toggle color output (set False for web/API usage)
+USE_COLOR = True
+
+def _c(color_code, text):
+    """Apply color only when USE_COLOR is True."""
+    if USE_COLOR:
+        return f"{color_code}{text}{Style.RESET_ALL}"
+    return text
+
 def get_line_snippet(line, filename=None):
     """Retrieve the exact line of code where the error occurred."""
     global CURRENT_SOURCE, CURRENT_FILENAME
@@ -24,7 +33,7 @@ def get_line_snippet(line, filename=None):
                 lines = f.readlines()
             if 1 <= line <= len(lines):
                 return lines[line - 1].strip()
-        except:
+        except Exception:
             pass
     return "Unavailable"
 
@@ -43,7 +52,7 @@ class UndefinedVariable(YOError):
 
     def __str__(self):
         snippet = get_line_snippet(self.line, self.filename)
-        title = f"{Fore.RED}{Style.BRIGHT}❌ YO Error — Undefined Variable{Style.RESET_ALL}"
+        title = _c(f"{Fore.RED}{Style.BRIGHT}", "❌ YO Error — Undefined Variable")
         details = f"     '{self.name}' was used but never made."
         
         if self.name == "let":
@@ -57,8 +66,8 @@ class UndefinedVariable(YOError):
         else:
             fix_msg = f"Add `make {self.name} = ...` before line {self.line}"
             
-        fix = f"{Fore.GREEN}{Style.BRIGHT}     Fix: {fix_msg}{Style.RESET_ALL}"
-        line_info = f"{Fore.YELLOW}     Line {self.line}: {snippet}{Style.RESET_ALL}"
+        fix = _c(f"{Fore.GREEN}{Style.BRIGHT}", f"     Fix: {fix_msg}")
+        line_info = _c(Fore.YELLOW, f"     Line {self.line}: {snippet}")
         return f"{title}\n{details}\n{fix}\n{line_info}"
 
 class InvalidSyntax(YOError):
@@ -70,7 +79,7 @@ class InvalidSyntax(YOError):
 
     def __str__(self):
         snippet = get_line_snippet(self.line, self.filename)
-        title = f"{Fore.RED}{Style.BRIGHT}❌ YO Error — Invalid Syntax{Style.RESET_ALL}"
+        title = _c(f"{Fore.RED}{Style.BRIGHT}", "❌ YO Error — Invalid Syntax")
         details = f"     Could not understand '{self.text.strip()}' on line {self.line}."
         
         # Detect common mistakes in the text or snippet
@@ -91,8 +100,8 @@ class InvalidSyntax(YOError):
             else:
                 fix_suggestion = f"Check syntax structure on line {self.line}."
                 
-        fix = f"{Fore.GREEN}{Style.BRIGHT}     Fix: {fix_suggestion}{Style.RESET_ALL}"
-        line_info = f"{Fore.YELLOW}     Line {self.line}: {snippet}{Style.RESET_ALL}"
+        fix = _c(f"{Fore.GREEN}{Style.BRIGHT}", f"     Fix: {fix_suggestion}")
+        line_info = _c(Fore.YELLOW, f"     Line {self.line}: {snippet}")
         return f"{title}\n{details}\n{fix}\n{line_info}"
 
 class TypeMismatch(YOError):
@@ -104,7 +113,7 @@ class TypeMismatch(YOError):
 
     def __str__(self):
         snippet = get_line_snippet(self.line, self.filename)
-        title = f"{Fore.RED}{Style.BRIGHT}❌ YO Error — Type Mismatch{Style.RESET_ALL}"
+        title = _c(f"{Fore.RED}{Style.BRIGHT}", "❌ YO Error — Type Mismatch")
         
         # Detect the operation in the code snippet
         op = None
@@ -120,8 +129,8 @@ class TypeMismatch(YOError):
             details = f"     Expected type '{self.expected}' on line {self.line}, but got '{self.got}'."
             fix_msg = f"Convert or use value of type '{self.expected}'."
             
-        fix = f"{Fore.GREEN}{Style.BRIGHT}     Fix: {fix_msg}{Style.RESET_ALL}"
-        line_info = f"{Fore.YELLOW}     Line {self.line}: {snippet}{Style.RESET_ALL}"
+        fix = _c(f"{Fore.GREEN}{Style.BRIGHT}", f"     Fix: {fix_msg}")
+        line_info = _c(Fore.YELLOW, f"     Line {self.line}: {snippet}")
         return f"{title}\n{details}\n{fix}\n{line_info}"
 
 class DivisionByZero(YOError):
@@ -131,8 +140,8 @@ class DivisionByZero(YOError):
 
     def __str__(self):
         snippet = get_line_snippet(self.line, self.filename)
-        title = f"{Fore.RED}{Style.BRIGHT}❌ YO Error — Division By Zero{Style.RESET_ALL}"
+        title = _c(f"{Fore.RED}{Style.BRIGHT}", "❌ YO Error — Division By Zero")
         details = f"     Cannot divide by zero on line {self.line}."
-        fix = f"{Fore.GREEN}{Style.BRIGHT}     Fix: Ensure the denominator is not zero before line {self.line}{Style.RESET_ALL}"
-        line_info = f"{Fore.YELLOW}     Line {self.line}: {snippet}{Style.RESET_ALL}"
+        fix = _c(f"{Fore.GREEN}{Style.BRIGHT}", f"     Fix: Ensure the denominator is not zero before line {self.line}")
+        line_info = _c(Fore.YELLOW, f"     Line {self.line}: {snippet}")
         return f"{title}\n{details}\n{fix}\n{line_info}"
