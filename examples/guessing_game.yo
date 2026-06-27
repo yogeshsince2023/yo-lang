@@ -1,45 +1,16 @@
 # ========================
-# Number Guessing Game — Interactive fun!
+# Number Patterns — Fun with loops!
 # ========================
 
-use math
+say "Multiplication Table of 7:"
+say "─────────────────────────"
+for each i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] {
+    say "7 x " + i + " = " + 7 * i
+}
 
-say "🎯 Number Guessing Game"
-say "I picked a number between 1 and 10."
-say "You have 3 chances. Let's go!"
 say ""
-
-make secret = 7
-make attempts = 0
-make won = false
-
-repeat attempts < 3 {
-    make attempts = attempts + 1
-    say "Attempt " + attempts + " of 3:"
-    make guess = ask
-
-    when guess == "" {
-        say "You didn't enter anything!"
-    }
-    when guess != "" {
-        make num = text.number(guess)
-        when num == secret {
-            say "🎉 Correct! You guessed it!"
-            make won = true
-            make attempts = 3
-        }
-        when num != secret {
-            when num < secret {
-                say "📈 Too low! Try higher."
-            }
-            when num > secret {
-                say "📉 Too high! Try lower."
-            }
-        }
-    }
+say "Counting down from 5:"
+for each n in [5, 4, 3, 2, 1] {
+    say n
 }
-
-when won == false {
-    say ""
-    say "😅 Out of attempts! The number was " + secret
-}
+say "Liftoff!"

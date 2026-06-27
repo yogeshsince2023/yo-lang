@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import List, Any, Optional
 from .errors import InvalidSyntax
 from .lexer import Token

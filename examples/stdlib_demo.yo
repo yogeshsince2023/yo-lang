@@ -7,7 +7,7 @@ use text
 use list
 
 # ── Math Library ──
-say "🔢 Math Library"
+say "Math Library"
 say "───────────────"
 say "round(3.7)  = " + math.round(3.7)
 say "floor(4.9)  = " + math.floor(4.9)
@@ -20,7 +20,7 @@ say ""
 
 # ── Text Library ──
 make word = "yo language"
-say "📝 Text Library"
+say "Text Library"
 say "───────────────"
 say "upper    = " + text.upper(word)
 say "lower    = " + text.lower(word)
@@ -31,7 +31,7 @@ say ""
 
 # ── List Library ──
 make nums = [9, 3, 7, 1, 5]
-say "📋 List Library"
+say "List Library"
 say "───────────────"
 say "original = " + nums
 say "sorted   = " + list.sort(nums)

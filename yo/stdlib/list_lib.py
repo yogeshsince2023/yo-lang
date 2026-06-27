@@ -7,5 +7,6 @@ LIST_LIB = {
     "first": lambda args: args[0][0] if len(args[0]) > 0 else None,
     "last": lambda args: args[0][-1] if len(args[0]) > 0 else None,
     "has": lambda args: args[1] in args[0],
-    "join": lambda args: str(args[1]).join(str(x) for x in args[0]) if len(args) > 1 else "".join(str(x) for x in args[0])
+    "join": lambda args: str(args[1]).join(str(x) for x in args[0]) if len(args) > 1 else "".join(str(x) for x in args[0]),
+    "sum": lambda args: sum(args[0])
 }

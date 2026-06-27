@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YO Playground — Write & Run YO Code</title>
+    <meta name="description" content="Interactive online playground for the YO programming language. Write, run, and experiment with YO code in your browser.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-panel: #16161e;
+            --bg-header: #1a1a24;
+            --border: #2a2a3a;
+            --border-glow: #6c5ce7;
+            --text-primary: #e8e8f0;
+            --text-secondary: #8888a0;
+            --text-muted: #555566;
+            --accent: #6c5ce7;
+            --accent-hover: #7d6ff0;
+            --accent-glow: rgba(108, 92, 231, 0.3);
+            --green: #00d68f;
+            --green-dim: rgba(0, 214, 143, 0.15);
+            --red: #ff5370;
+            --red-dim: rgba(255, 83, 112, 0.15);
+            --yellow: #ffd866;
+            --orange: #ff9f43;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* ── Header ── */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            height: 56px;
+            background: var(--bg-header);
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent), #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-sub {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 400;
+            padding-left: 12px;
+            border-left: 1px solid var(--border);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* ── Buttons ── */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 20px;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        .btn-run {
+            background: var(--accent);
+            color: white;
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        .btn-run:hover {
+            background: var(--accent-hover);
+            box-shadow: 0 0 30px var(--accent-glow);
+            transform: translateY(-1px);
+        }
+
+        .btn-run:active {
+            transform: translateY(0);
+        }
+
+        .btn-run.running {
+            background: var(--text-muted);
+            box-shadow: none;
+            cursor: wait;
+        }
+
+        .btn-clear {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-clear:hover {
+            border-color: var(--text-muted);
+            color: var(--text-primary);
+        }
+
+        .btn-example {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+            padding: 8px 14px;
+        }
+
+        .btn-example:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* ── Main Layout ── */
+        .main {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .panel {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .divider {
+            width: 1px;
+            background: var(--border);
+            position: relative;
+            cursor: col-resize;
+            flex-shrink: 0;
+        }
+
+        .divider::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -3px;
+            right: -3px;
+            bottom: 0;
+        }
+
+        .divider:hover {
+            background: var(--accent);
+        }
+
+        /* ── Panel Headers ── */
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            height: 40px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+
+        .panel-title {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .panel-title .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--accent);
+        }
+
+        .status-badge {
+            font-size: 11px;
+            font-weight: 500;
+            padding: 2px 10px;
+            border-radius: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .status-badge.ready {
+            background: var(--green-dim);
+            color: var(--green);
+        }
+
+        .status-badge.error {
+            background: var(--red-dim);
+            color: var(--red);
+        }
+
+        .status-badge.running {
+            background: rgba(108, 92, 231, 0.15);
+            color: var(--accent);
+        }
+
+        /* ── Editor ── */
+        .editor-container {
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* ── Output ── */
+        .output-container {
+            flex: 1;
+            overflow: auto;
+            padding: 16px 20px;
+            background: var(--bg-panel);
+        }
+
+        .output-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .output-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .output-container::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px;
+        }
+
+        .output-line {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            line-height: 1.7;
+            color: var(--text-primary);
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .output-error {
+            color: var(--red);
+        }
+
+        .output-error .error-title {
+            font-weight: 600;
+        }
+
+        .output-error .error-fix {
+            color: var(--green);
+        }
+
+        .output-error .error-line {
+            color: var(--yellow);
+        }
+
+        .output-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: var(--text-muted);
+            gap: 12px;
+            user-select: none;
+        }
+
+        .output-placeholder svg {
+            opacity: 0.3;
+        }
+
+        .output-placeholder p {
+            font-size: 13px;
+        }
+
+        .output-placeholder kbd {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+        }
+
+        /* ── Timer ── */
+        .exec-time {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--text-muted);
+            padding: 0 16px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+
+        /* ── Spin animation ── */
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .spinner {
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+            .main {
+                flex-direction: column;
+            }
+            .divider {
+                width: 100%;
+                height: 1px;
+                cursor: row-resize;
+            }
+            .logo-sub { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <span class="logo">YO</span>
+            <span class="logo-sub">Playground v1.0</span>
+        </div>
+        <div class="header-right">
+            <select id="exampleSelect" class="btn btn-example" onchange="loadExample(this.value)">
+                <option value="">📂 Examples</option>
+                <option value="hello">Hello World</option>
+                <option value="fibonacci">Fibonacci</option>
+                <option value="factorial">Factorial</option>
+                <option value="fizzbuzz">FizzBuzz</option>
+                <option value="stdlib">Stdlib Demo</option>
+            </select>
+            <button class="btn btn-clear" onclick="clearOutput()" id="clearBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4h8v2M5 6v14a2 2 0 002 2h10a2 2 0 002-2V6"/></svg>
+                Clear
+            </button>
+            <button class="btn btn-run" onclick="runCode()" id="runBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+                Run
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Layout -->
+    <main class="main">
+        <!-- Editor Panel -->
+        <div class="panel" id="editorPanel">
+            <div class="panel-header">
+                <span class="panel-title">
+                    <span class="dot"></span>
+                    Editor
+                </span>
+                <span class="status-badge ready" id="statusBadge">Ready</span>
+            </div>
+            <div class="editor-container" id="editorContainer"></div>
+        </div>
+
+        <!-- Divider -->
+        <div class="divider" id="divider"></div>
+
+        <!-- Output Panel -->
+        <div class="panel" id="outputPanel">
+            <div class="panel-header">
+                <span class="panel-title">
+                    <span class="dot" style="background: var(--green)"></span>
+                    Output
+                </span>
+            </div>
+            <div class="output-container" id="outputContainer">
+                <div class="output-placeholder" id="placeholder">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <polyline points="4,17 10,11 4,5"/><line x1="12" y1="19" x2="20" y2="19"/>
+                    </svg>
+                    <p>Write some YO code and hit <kbd>Ctrl + Enter</kbd> to run</p>
+                </div>
+            </div>
+            <div class="exec-time" id="execTime"></div>
+        </div>
+    </main>
+
+    <!-- Monaco Editor from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
+    <script>
+        let editor;
+
+        // ── Example Programs ──
+        const EXAMPLES = {
+            hello: `# Hello World in YO
+
+say "Hello, World!"
+say "Welcome to YO language!"
+
+make name = "Yogesh"
+say "My name is " + name
+
+make age = 20
+say name + " is " + age + " years old"`,
+
+            fibonacci: `# Fibonacci Sequence
+
+make a = 0
+make b = 1
+
+say "Fibonacci (first 10):"
+repeat 10 times {
+    say a
+    make temp = a + b
+    a = b
+    b = temp
+}`,
+
+            factorial: `# Factorial with Tasks
+
+task factorial(n) {
+    make result = 1
+    for each num in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] {
+        when num <= n {
+            result = result * num
+        }
+    }
+    return result
+}
+
+say "Factorial of 5 is:"
+say factorial(5)
+say "Factorial of 8 is:"
+say factorial(8)`,
+
+            fizzbuzz: `# FizzBuzz — The Classic
+
+for each i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20] {
+    when i % 15 == 0 {
+        say i + " -> FizzBuzz"
+    }
+    when i % 15 != 0 {
+        when i % 3 == 0 {
+            say i + " -> Fizz"
+        }
+        when i % 3 != 0 {
+            when i % 5 == 0 {
+                say i + " -> Buzz"
+            }
+            when i % 5 != 0 {
+                say i
+            }
+        }
+    }
+}`,
+
+            stdlib: `# Standard Library Demo
+use math
+use text
+use list
+
+say "Math: round(3.7) = " + math.round(3.7)
+say "Math: power(2, 8) = " + math.power(2, 8)
+
+make word = "yo language"
+say "Text: upper = " + text.upper(word)
+say "Text: length = " + text.length(word)
+
+make nums = [9, 3, 7, 1, 5]
+say "List: sorted = " + list.sort(nums)
+say "List: sum = " + list.sum(nums)`
+        };
+
+        // ── Initialize Monaco ──
+        require.config({
+            paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs' }
+        });
+
+        require(['vs/editor/editor.main'], function () {
+            // Register YO language
+            monaco.languages.register({ id: 'yo' });
+
+            monaco.languages.setMonarchTokensProvider('yo', {
+                keywords: ['make', 'say', 'when', 'otherwise', 'repeat', 'times', 'for', 'each', 'in', 'task', 'return', 'use', 'ask', 'true', 'false', 'null', 'and', 'or', 'not'],
+                operators: ['==', '!=', '>=', '<=', '>', '<', '+', '-', '*', '/', '%', '='],
+                tokenizer: {
+                    root: [
+                        [/#.*$/, 'comment'],
+                        [/"[^"]*"/, 'string'],
+                        [/'[^']*'/, 'string'],
+                        [/\b\d+(\.\d+)?\b/, 'number'],
+                        [/\b(make|say|when|otherwise|repeat|times|for|each|in|task|return|use)\b/, 'keyword'],
+                        [/\b(true|false|null)\b/, 'constant'],
+                        [/\b(and|or|not)\b/, 'keyword'],
+                        [/\b(ask)\b/, 'type'],
+                        [/\b(math|text|list)\.\w+/, 'support.function'],
+                        [/[{}()\[\]]/, '@brackets'],
+                        [/[=!<>]=?|[+\-*\/%]/, 'operator'],
+                        [/[a-zA-Z_]\w*/, 'identifier'],
+                    ]
+                }
+            });
+
+            // Define YO theme
+            monaco.editor.defineTheme('yo-dark', {
+                base: 'vs-dark',
+                inherit: true,
+                rules: [
+                    { token: 'keyword', foreground: 'c792ea', fontStyle: 'bold' },
+                    { token: 'string', foreground: 'c3e88d' },
+                    { token: 'number', foreground: 'f78c6c' },
+                    { token: 'comment', foreground: '546e7a', fontStyle: 'italic' },
+                    { token: 'constant', foreground: 'ff5370' },
+                    { token: 'operator', foreground: '89ddff' },
+                    { token: 'type', foreground: 'ffcb6b' },
+                    { token: 'support.function', foreground: '82aaff' },
+                    { token: 'identifier', foreground: 'eeffff' },
+                ],
+                colors: {
+                    'editor.background': '#16161e',
+                    'editor.foreground': '#e8e8f0',
+                    'editor.lineHighlightBackground': '#1e1e2a',
+                    'editor.selectionBackground': '#3a3a5a',
+                    'editorCursor.foreground': '#6c5ce7',
+                    'editorLineNumber.foreground': '#3a3a4a',
+                    'editorLineNumber.activeForeground': '#6c5ce7',
+                    'editor.selectionHighlightBackground': '#2a2a4a',
+                }
+            });
+
+            editor = monaco.editor.create(document.getElementById('editorContainer'), {
+                value: `# Welcome to YO Playground! 🚀\n# Try writing some code and hit Run\n\nmake greeting = "Hello from YO!"\nsay greeting\n\nmake nums = [1, 2, 3, 4, 5]\nfor each n in nums {\n    say n * n\n}\n`,
+                language: 'yo',
+                theme: 'yo-dark',
+                fontFamily: "'JetBrains Mono', monospace",
+                fontSize: 14,
+                lineHeight: 24,
+                padding: { top: 16, bottom: 16 },
+                minimap: { enabled: false },
+                scrollBeyondLastLine: false,
+                renderLineHighlight: 'line',
+                smoothScrolling: true,
+                cursorSmoothCaretAnimation: 'on',
+                cursorBlinking: 'smooth',
+                bracketPairColorization: { enabled: true },
+                automaticLayout: true,
+                tabSize: 4,
+            });
+
+            // Ctrl+Enter to run
+            editor.addAction({
+                id: 'run-yo-code',
+                label: 'Run YO Code',
+                keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter],
+                run: () => runCode()
+            });
+        });
+
+        // ── Run Code ──
+        async function runCode() {
+            const code = editor.getValue();
+            const runBtn = document.getElementById('runBtn');
+            const badge = document.getElementById('statusBadge');
+            const output = document.getElementById('outputContainer');
+            const execTime = document.getElementById('execTime');
+            const placeholder = document.getElementById('placeholder');
+
+            // Update UI
+            runBtn.classList.add('running');
+            runBtn.innerHTML = '<span class="spinner"></span> Running…';
+            badge.className = 'status-badge running';
+            badge.textContent = 'Running…';
+
+            const startTime = performance.now();
+
+            try {
+                const res = await fetch('/run', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code })
+                });
+
+                const data = await res.json();
+                const elapsed = ((performance.now() - startTime) / 1000).toFixed(3);
+
+                // Render output
+                output.innerHTML = '';
+
+                if (data.output) {
+                    const lines = data.output.split('\n');
+                    lines.forEach(line => {
+                        if (line !== '' || lines.length === 1) {
+                            const div = document.createElement('div');
+                            div.className = 'output-line';
+                            div.textContent = line;
+                            output.appendChild(div);
+                        }
+                    });
+                }
+
+                if (data.error) {
+                    const errorDiv = document.createElement('div');
+                    errorDiv.className = 'output-line output-error';
+
+                    // Parse error lines for colored output
+                    const errorLines = data.error.split('\n');
+                    errorLines.forEach(eLine => {
+                        const p = document.createElement('div');
+                        if (eLine.includes('YO Error')) {
+                            p.className = 'error-title';
+                        } else if (eLine.trim().startsWith('Fix:')) {
+                            p.className = 'error-fix';
+                        } else if (eLine.trim().startsWith('Line')) {
+                            p.className = 'error-line';
+                        }
+                        p.textContent = eLine;
+                        errorDiv.appendChild(p);
+                    });
+
+                    output.appendChild(errorDiv);
+                    badge.className = 'status-badge error';
+                    badge.textContent = 'Error';
+                } else {
+                    badge.className = 'status-badge ready';
+                    badge.textContent = 'Done';
+                }
+
+                if (!data.output && !data.error) {
+                    const empty = document.createElement('div');
+                    empty.className = 'output-line';
+                    empty.style.color = 'var(--text-muted)';
+                    empty.textContent = '(no output)';
+                    output.appendChild(empty);
+                }
+
+                execTime.textContent = `Executed in ${elapsed}s`;
+
+            } catch (err) {
+                output.innerHTML = '';
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'output-line output-error';
+                errorDiv.textContent = '⚠ Could not connect to server. Is the Flask API running?';
+                output.appendChild(errorDiv);
+                badge.className = 'status-badge error';
+                badge.textContent = 'Disconnected';
+                execTime.textContent = '';
+            }
+
+            // Reset button
+            runBtn.classList.remove('running');
+            runBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg> Run`;
+        }
+
+        // ── Clear Output ──
+        function clearOutput() {
+            const output = document.getElementById('outputContainer');
+            output.innerHTML = `
+                <div class="output-placeholder" id="placeholder">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <polyline points="4,17 10,11 4,5"/><line x1="12" y1="19" x2="20" y2="19"/>
+                    </svg>
+                    <p>Write some YO code and hit <kbd>Ctrl + Enter</kbd> to run</p>
+                </div>`;
+            document.getElementById('execTime').textContent = '';
+            document.getElementById('statusBadge').className = 'status-badge ready';
+            document.getElementById('statusBadge').textContent = 'Ready';
+        }
+
+        // ── Load Example ──
+        function loadExample(name) {
+            if (name && EXAMPLES[name]) {
+                editor.setValue(EXAMPLES[name]);
+                document.getElementById('exampleSelect').value = '';
+            }
+        }
+
+        // ── Resizable Divider ──
+        const divider = document.getElementById('divider');
+        let isDragging = false;
+
+        divider.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            document.body.style.cursor = 'col-resize';
+            document.body.style.userSelect = 'none';
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            const container = document.querySelector('.main');
+            const rect = container.getBoundingClientRect();
+            const percent = ((e.clientX - rect.left) / rect.width) * 100;
+            const clamped = Math.max(25, Math.min(75, percent));
+
+            document.getElementById('editorPanel').style.flex = `0 0 ${clamped}%`;
+            document.getElementById('outputPanel').style.flex = `0 0 ${100 - clamped}%`;
+        });
+
+        document.addEventListener('mouseup', () => {
+            isDragging = false;
+            document.body.style.cursor = '';
+            document.body.style.userSelect = '';
+        });
+    </script>
+</body>
+</html>
