@@ -1,0 +1,82 @@
+{
+  "name": "yo-lang",
+  "displayName": "YO Language",
+  "description": "VS Code extension for the YO programming language — syntax highlighting, snippets, and Run command.",
+  "version": "1.0.0",
+  "publisher": "yogeshsince2023",
+  "author": {
+    "name": "Yogesh"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yogeshsince2023/yo-lang"
+  },
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Snippets"
+  ],
+  "keywords": [
+    "yo",
+    "yo-lang",
+    "programming language",
+    "beginner",
+    "interpreter"
+  ],
+  "icon": "icons/yo-icon.png",
+  "activationEvents": [
+    "onLanguage:yo"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "yo",
+        "aliases": ["YO", "yo-lang"],
+        "extensions": [".yo"],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "yo",
+        "scopeName": "source.yo",
+        "path": "./syntaxes/yo.tmLanguage.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "yo",
+        "path": "./snippets/yo.snippets.json"
+      }
+    ],
+    "commands": [
+      {
+        "command": "yo.runFile",
+        "title": "Run YO File",
+        "category": "YO",
+        "icon": "$(play)"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "yo.runFile",
+        "key": "ctrl+shift+r",
+        "mac": "cmd+shift+r",
+        "when": "editorLangId == yo"
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "command": "yo.runFile",
+          "when": "editorLangId == yo",
+          "group": "navigation"
+        }
+      ]
+    }
+  }
+}

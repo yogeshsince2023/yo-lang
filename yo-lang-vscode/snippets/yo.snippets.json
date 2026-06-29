@@ -1,0 +1,85 @@
+{
+  "Task (Function)": {
+    "prefix": "task",
+    "body": [
+      "task ${1:name}(${2:params}) {",
+      "    ${3:# body}",
+      "    return ${4:result}",
+      "}"
+    ],
+    "description": "Create a YO task (function)"
+  },
+  "Make Variable": {
+    "prefix": "make",
+    "body": [
+      "make ${1:name} = ${2:value}"
+    ],
+    "description": "Declare a variable with make"
+  },
+  "When Condition": {
+    "prefix": "when",
+    "body": [
+      "when ${1:condition} {",
+      "    ${2:# then}",
+      "}"
+    ],
+    "description": "When condition block"
+  },
+  "When/Else Condition": {
+    "prefix": "whenelse",
+    "body": [
+      "when ${1:condition} {",
+      "    ${2:# then}",
+      "} else {",
+      "    ${3:# otherwise}",
+      "}"
+    ],
+    "description": "When/Else condition block"
+  },
+  "Repeat Loop": {
+    "prefix": "repeat",
+    "body": [
+      "repeat ${1:count} times {",
+      "    ${2:# body}",
+      "}"
+    ],
+    "description": "Repeat N times loop"
+  },
+  "For Each Loop": {
+    "prefix": "foreach",
+    "body": [
+      "for each ${1:item} in ${2:list} {",
+      "    ${3:# body}",
+      "}"
+    ],
+    "description": "For each loop over a list"
+  },
+  "Say (Print)": {
+    "prefix": "say",
+    "body": [
+      "say ${1:expression}"
+    ],
+    "description": "Print a value"
+  },
+  "Use Library": {
+    "prefix": "use",
+    "body": [
+      "use ${1|math,text,list|}"
+    ],
+    "description": "Import a standard library"
+  },
+  "Ask Input": {
+    "prefix": "ask",
+    "body": [
+      "make ${1:input} = ask()"
+    ],
+    "description": "Read user input"
+  },
+  "List Declaration": {
+    "prefix": "list",
+    "body": [
+      "make ${1:name} = [${2:items}]"
+    ],
+    "description": "Create a list"
+  }
+}

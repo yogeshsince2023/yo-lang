@@ -1,0 +1,94 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "YO",
+  "scopeName": "source.yo",
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#strings" },
+    { "include": "#numbers" },
+    { "include": "#booleans" },
+    { "include": "#keywords" },
+    { "include": "#builtins" },
+    { "include": "#stdlib-calls" },
+    { "include": "#operators" },
+    { "include": "#punctuation" },
+    { "include": "#identifiers" }
+  ],
+  "repository": {
+    "comments": {
+      "name": "comment.line.hash.yo",
+      "match": "#.*$"
+    },
+    "strings": {
+      "name": "string.quoted.double.yo",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [
+        {
+          "name": "constant.character.escape.yo",
+          "match": "\\\\."
+        }
+      ]
+    },
+    "numbers": {
+      "name": "constant.numeric.yo",
+      "match": "\\b\\d+(\\.\\d+)?\\b"
+    },
+    "booleans": {
+      "name": "constant.language.boolean.yo",
+      "match": "\\b(true|false|null)\\b"
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.yo",
+          "match": "\\b(when|else|repeat|times|for|each|in|return)\\b"
+        },
+        {
+          "name": "keyword.declaration.yo",
+          "match": "\\b(make|task)\\b"
+        },
+        {
+          "name": "keyword.other.yo",
+          "match": "\\b(say|ask|use)\\b"
+        },
+        {
+          "name": "keyword.operator.logical.yo",
+          "match": "\\b(and|or|not)\\b"
+        }
+      ]
+    },
+    "builtins": {
+      "name": "support.function.yo",
+      "match": "\\b(say|ask)\\b"
+    },
+    "stdlib-calls": {
+      "name": "support.function.stdlib.yo",
+      "match": "\\b(math|text|list)\\.[a-zA-Z_]\\w*\\b"
+    },
+    "operators": {
+      "name": "keyword.operator.yo",
+      "match": "(==|!=|>=|<=|>|<|\\+|-|\\*|/|%|=)"
+    },
+    "punctuation": {
+      "patterns": [
+        {
+          "name": "punctuation.definition.block.yo",
+          "match": "[{}]"
+        },
+        {
+          "name": "punctuation.bracket.yo",
+          "match": "[\\[\\]()]"
+        },
+        {
+          "name": "punctuation.separator.yo",
+          "match": "[,\\.]"
+        }
+      ]
+    },
+    "identifiers": {
+      "name": "variable.other.yo",
+      "match": "\\b[a-zA-Z_]\\w*\\b"
+    }
+  }
+}
