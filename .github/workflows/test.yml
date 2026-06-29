@@ -23,8 +23,12 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install pytest colorama lark-parser
+          python -m pip install --upgrade pip
+          pip install pytest colorama flask
+          pip install -e .
 
       - name: Run YO test suite
         run: |
-          pytest tests/ -v --tb=short
+          python -m pytest tests/ -v --tb=short
+        env:
+          PYTHONPATH: .
