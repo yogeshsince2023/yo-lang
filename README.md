@@ -174,3 +174,8 @@ yo-lang/
 
 ## 📄 License
 This project is licensed under the MIT License - see the LICENSE file for details.
+
+![YO Tests](https://github.com/yogeshsince2023/yo-lang/actions/workflows/test.yml/badge.svg)
+![PyPI](https://img.shields.io/pypi/v/yo-lang)
+![License](https://img.shields.io/badge/license-MIT-green)
+![Python](https://img.shields.io/badge/python-3.9+-blue)
