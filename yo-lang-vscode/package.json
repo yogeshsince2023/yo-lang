@@ -1,6 +1,6 @@
 {
   "name": "yo-lang",
-  "displayName": "YO Language",
+  "displayName": "YO Language Support",
   "description": "VS Code extension for the YO programming language — syntax highlighting, snippets, and Run command.",
   "version": "1.0.0",
   "publisher": "yogeshsince2023",
