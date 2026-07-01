@@ -169,81 +169,9 @@ yo-lang/
 
 ## 🔍 Error Messages: YO vs Python
 
-YO was designed with **beginner-friendly error messages** — no more cryptic tracebacks. Here's how YO compares to Python:
+YO was designed with **beginner-friendly error messages** to help first-time coders fix bugs faster. While Python stops at the first error with a traceback, YO collects multiple errors, suggests inline fixes (like typo corrections), and provides a built-in interactive explanation tool (`yo explain`).
 
-### Undefined Variable
-
-**Python:**
-```
-NameError: name 'scroe' is not defined
-```
-
-**YO:**
-```
-❌ [E001] YO Error — Undefined Variable
-     'scroe' was used but never made.
-     Fix: Did you mean 'score'? If not, add `make scroe = ...` before line 7
-     Line 7: say scroe
-```
-
-> YO detects the typo and suggests the closest variable name.
-
-### Type Mismatch
-
-**Python:**
-```
-TypeError: unsupported operand type(s) for -: 'str' and 'int'
-```
-
-**YO:**
-```
-❌ [E003] YO Error — Type Mismatch
-     Type clash on operation '-': expected 'NUMBER', but got 'STRING'.
-     Fix: Ensure both sides of '-' are compatible (e.g. both numbers).
-     Line 4: say "hello" - 5
-```
-
-> YO tells you *which* operation failed, *what types* it found, and *how to fix it*.
-
-### Division By Zero
-
-**Python:**
-```
-ZeroDivisionError: division by zero
-```
-
-**YO:**
-```
-❌ [E004] YO Error — Division By Zero
-     Cannot divide by zero on line 3.
-     Fix: Ensure the denominator is not zero before line 3
-     Line 3: make result = 10 / 0
-```
-
-> Every error includes the **line number**, the **exact code**, and a **fix suggestion**.
-
-### Multi-Error Reporting
-
-Python stops at the **first** error. YO collects **all errors** in a single run (up to 10):
-
-```
-══════════════════════════════════════════════════
-  Found 3 errors in your YO program
-══════════════════════════════════════════════════
-
-  [1/3]
-❌ [E001] YO Error — Undefined Variable ...
-──────────────────────────────────────────────────
-  [2/3]
-❌ [E004] YO Error — Division By Zero ...
-──────────────────────────────────────────────────
-  [3/3]
-❌ [E001] YO Error — Undefined Variable ...
-
-══════════════════════════════════════════════════
-```
-
-> Use `yo explain E003` to get a full reference with examples for any error code.
+See the full side-by-side comparison, design philosophy, and study results in [comparison.md](file:///y:/yo-lang/comparison.md).
 
 ---
 
