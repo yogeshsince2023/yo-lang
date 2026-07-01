@@ -7,11 +7,11 @@ from .environment import Environment
 from .errors import YOError
 
 def print_usage():
-    print("YO Language v1.0")
+    print("YO Language v1.1")
     print("Usage: python yo.py yourfile.yo")
 
 def start_repl():
-    print("YO v1.0 — Interactive Mode")
+    print("YO v1.1 — Interactive Mode")
     print("Type 'exit' to quit, 'clear' to reset variables")
     
     global_env = Environment()

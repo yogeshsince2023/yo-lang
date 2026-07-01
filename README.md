@@ -10,7 +10,19 @@
 
 ## 📝 What is YO?
 
-YO is a beginner-friendly, dynamic programming language designed to make coding intuitive and fun. Built from scratch in Python, it prioritizes readability with conversational syntax and color-coded, actionable error diagnostics. It offers nested environments for functions, an interactive REPL mode, and built-in standard libraries for math, text, and lists.
+YO is a beginner-friendly, dynamic programming language designed to make coding intuitive and fun. Built from scratch in Python, it prioritizes readability with conversational syntax and color-coded, actionable error diagnostics.
+
+---
+
+## ✨ Key Features
+
+- **🗣️ Conversational Syntax:** Built with beginner-oriented keywords: `make` to declare, `say` to print, `task` to define functions, `when` for conditions, and `repeat` for loops.
+- **🛡️ Multi-Error Collection:** Runs the full program to find and report up to 10 errors at once (similar to Rust and Elm) rather than crashing at the very first mistake.
+- **📖 Built-in Interactive Explainer:** Run `yo explain <ERROR_CODE>` (e.g. `yo explain E003`) to view detailed explanations, bad/fixed code examples, and common pitfalls directly in the terminal.
+- **🎨 Actionable Diagnostics:** Color-coded, clear error messages showing the exact line of code, the typo suggestion, and a concrete fix instruction.
+- **📦 Dynamic Standard Libraries:** In-language imports (`use math`, `use text`, `use list`) to manipulate mathematical expressions, strings, and arrays.
+- **🔌 Developer Ecosystem:** Comes with a custom Web Playground and a dedicated **VS Code Extension** (`YO Programming Language`) for syntax highlighting, autocomplete snippets, and integrated run commands.
+- **🔍 Educational Architecture:** A fully handwritten lexer, recursive descent parser, and tree-walk interpreter with lexical scoping (closures) — perfect for learning compiler design.
 
 ---
 
@@ -106,7 +118,7 @@ Running `yo.py` with no arguments boots up interactive mode:
 python yo.py
 ```
 ```
-YO v1.0 — Interactive Mode
+YO v1.1 — Interactive Mode
 Type 'exit' to quit, 'clear' to reset variables
 yo> make x = 5
 yo> say x
