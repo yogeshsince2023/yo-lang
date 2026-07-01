@@ -59,6 +59,18 @@ def main():
         sys.exit(0)
 
     arg1 = sys.argv[1]
+
+    # ── yo explain E003 ──
+    if arg1 == "explain":
+        from .errors_reference import format_reference_entry, ERROR_REFERENCE
+        if len(sys.argv) < 3:
+            print("Usage: yo explain <ERROR_CODE>")
+            print(f"Available codes: {', '.join(sorted(ERROR_REFERENCE.keys()))}")
+            sys.exit(1)
+        code = sys.argv[2].upper()
+        print(format_reference_entry(code))
+        sys.exit(0)
+
     if arg1 == "run":
         if len(sys.argv) < 3:
             print_usage()

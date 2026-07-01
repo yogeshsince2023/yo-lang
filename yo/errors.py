@@ -39,11 +39,15 @@ def get_line_snippet(line, filename=None):
 
 class YOError(Exception):
     """Base class for all YO language exceptions."""
+    error_code = None  # Subclasses override this (e.g. "E001")
+
     def __init__(self, filename=None):
         self.filename = filename or CURRENT_FILENAME
         super().__init__()
 
 class UndefinedVariable(YOError):
+    error_code = "E001"
+
     def __init__(self, name, suggestion=None, line=7, filename=None):
         self.name = name
         self.suggestion = suggestion
@@ -52,7 +56,7 @@ class UndefinedVariable(YOError):
 
     def __str__(self):
         snippet = get_line_snippet(self.line, self.filename)
-        title = _c(f"{Fore.RED}{Style.BRIGHT}", "❌ YO Error — Undefined Variable")
+        title = _c(f"{Fore.RED}{Style.BRIGHT}", f"❌ [{self.error_code}] YO Error — Undefined Variable")
         details = f"     '{self.name}' was used but never made."
         
         if self.name == "let":
@@ -71,6 +75,8 @@ class UndefinedVariable(YOError):
         return f"{title}\n{details}\n{fix}\n{line_info}"
 
 class InvalidSyntax(YOError):
+    error_code = "E002"
+
     def __init__(self, line, text, suggestion=None, filename=None):
         self.line = line
         self.text = text
@@ -79,7 +85,7 @@ class InvalidSyntax(YOError):
 
     def __str__(self):
         snippet = get_line_snippet(self.line, self.filename)
-        title = _c(f"{Fore.RED}{Style.BRIGHT}", "❌ YO Error — Invalid Syntax")
+        title = _c(f"{Fore.RED}{Style.BRIGHT}", f"❌ [{self.error_code}] YO Error — Invalid Syntax")
         details = f"     Could not understand '{self.text.strip()}' on line {self.line}."
         
         # Detect common mistakes in the text or snippet
@@ -105,6 +111,8 @@ class InvalidSyntax(YOError):
         return f"{title}\n{details}\n{fix}\n{line_info}"
 
 class TypeMismatch(YOError):
+    error_code = "E003"
+
     def __init__(self, expected, got, line, filename=None):
         self.expected = expected
         self.got = got
@@ -113,7 +121,7 @@ class TypeMismatch(YOError):
 
     def __str__(self):
         snippet = get_line_snippet(self.line, self.filename)
-        title = _c(f"{Fore.RED}{Style.BRIGHT}", "❌ YO Error — Type Mismatch")
+        title = _c(f"{Fore.RED}{Style.BRIGHT}", f"❌ [{self.error_code}] YO Error — Type Mismatch")
         
         # Detect the operation in the code snippet
         op = None
@@ -134,13 +142,15 @@ class TypeMismatch(YOError):
         return f"{title}\n{details}\n{fix}\n{line_info}"
 
 class DivisionByZero(YOError):
+    error_code = "E004"
+
     def __init__(self, line, filename=None):
         self.line = line
         super().__init__(filename)
 
     def __str__(self):
         snippet = get_line_snippet(self.line, self.filename)
-        title = _c(f"{Fore.RED}{Style.BRIGHT}", "❌ YO Error — Division By Zero")
+        title = _c(f"{Fore.RED}{Style.BRIGHT}", f"❌ [{self.error_code}] YO Error — Division By Zero")
         details = f"     Cannot divide by zero on line {self.line}."
         fix = _c(f"{Fore.GREEN}{Style.BRIGHT}", f"     Fix: Ensure the denominator is not zero before line {self.line}")
         line_info = _c(Fore.YELLOW, f"     Line {self.line}: {snippet}")
