@@ -91,13 +91,19 @@ def main():
         parser = Parser(tokens)
         ast = parser.parse()
 
-        # Executing
+        # Executing — the interpreter now collects errors instead of
+        # stopping at the first one.
         interpreter = Interpreter()
         global_env = Environment()
         interpreter.evaluate(ast, global_env)
 
+        # After the full run, display all collected errors
+        if interpreter.error_collector.has_errors():
+            print(interpreter.error_collector.format_report())
+            sys.exit(1)
+
     except YOError as e:
-        # Print colorized beginner-friendly error
+        # Parse-time or single fatal errors still fall through here
         print(e)
         sys.exit(1)
     except Exception as e:

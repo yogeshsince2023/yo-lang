@@ -145,3 +145,82 @@ class DivisionByZero(YOError):
         fix = _c(f"{Fore.GREEN}{Style.BRIGHT}", f"     Fix: Ensure the denominator is not zero before line {self.line}")
         line_info = _c(Fore.YELLOW, f"     Line {self.line}: {snippet}")
         return f"{title}\n{details}\n{fix}\n{line_info}"
+
+
+# ─── Multi-Error Collection ────────────────────────────────────────────
+
+MAX_ERRORS = 10
+
+class ErrorCollector:
+    """Collects multiple YO errors during a single run instead of
+    stopping at the first one.  Errors are sorted by line number and
+    capped at MAX_ERRORS."""
+
+    def __init__(self):
+        self.errors: list[YOError] = []
+        self._overflow = False
+
+    # ── Public API ──────────────────────────────────────────────────
+
+    def add(self, error: YOError) -> None:
+        """Record an error.  After MAX_ERRORS the collector stops accepting."""
+        if len(self.errors) >= MAX_ERRORS:
+            self._overflow = True
+            return
+        self.errors.append(error)
+
+    def has_errors(self) -> bool:
+        return len(self.errors) > 0
+
+    @property
+    def count(self) -> int:
+        return len(self.errors)
+
+    def clear(self) -> None:
+        self.errors.clear()
+        self._overflow = False
+
+    # ── Reporting ───────────────────────────────────────────────────
+
+    def format_report(self) -> str:
+        """Return a formatted multi-error report string, sorted by
+        line number, each with its own fix suggestion."""
+        if not self.errors:
+            return ""
+
+        # Sort by line number (errors without a .line attribute go last)
+        sorted_errors = sorted(
+            self.errors,
+            key=lambda e: getattr(e, "line", float("inf"))
+        )
+
+        separator = _c(Fore.RED, "─" * 50)
+        header = _c(
+            f"{Fore.RED}{Style.BRIGHT}",
+            f"\n{'═' * 50}\n"
+            f"  Found {len(sorted_errors)} error{'s' if len(sorted_errors) != 1 else ''} in your YO program\n"
+            f"{'═' * 50}"
+        )
+
+        parts = [header]
+        for idx, err in enumerate(sorted_errors, start=1):
+            label = _c(f"{Fore.CYAN}{Style.BRIGHT}", f"\n  [{idx}/{len(sorted_errors)}]")
+            parts.append(label)
+            parts.append(str(err))
+            if idx < len(sorted_errors):
+                parts.append(separator)
+
+        if self._overflow:
+            overflow_msg = _c(
+                f"{Fore.YELLOW}{Style.BRIGHT}",
+                f"\n  ⚠ Showing first {MAX_ERRORS} errors only. Fix these and re-run to see more."
+            )
+            parts.append(overflow_msg)
+
+        footer = _c(
+            f"{Fore.RED}{Style.BRIGHT}",
+            f"\n{'═' * 50}"
+        )
+        parts.append(footer)
+        return "\n".join(parts)
+

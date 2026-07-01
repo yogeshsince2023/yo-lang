@@ -29,6 +29,27 @@ def run_yo(code: str) -> str:
         interpreter.evaluate(ast, env)
     return f.getvalue()
 
+def run_yo_interpreter(code: str) -> Interpreter:
+    """Helper that returns the Interpreter instance so tests can
+    inspect the error_collector after a run."""
+    from yo import errors
+    errors.CURRENT_SOURCE = code
+    errors.CURRENT_FILENAME = "<test>"
+    errors.USE_COLOR = False
+
+    lexer = Lexer(code)
+    tokens = lexer.tokenize()
+    parser = Parser(tokens)
+    ast = parser.parse()
+
+    interpreter = Interpreter()
+    env = Environment()
+
+    f = io.StringIO()
+    with contextlib.redirect_stdout(f):
+        interpreter.evaluate(ast, env)
+    return interpreter
+
 # ─── 1. Variables ───
 
 def test_variable_declaration():
@@ -157,15 +178,38 @@ def test_list_library():
 
 def test_error_undefined_variable():
     code = "say non_existent"
-    with pytest.raises(UndefinedVariable):
-        run_yo(code)
+    interp = run_yo_interpreter(code)
+    assert interp.error_collector.has_errors()
+    assert any(isinstance(e, UndefinedVariable) for e in interp.error_collector.errors)
 
 def test_error_type_mismatch():
     code = "say 5 + [1, 2]"
-    with pytest.raises(TypeMismatch):
-        run_yo(code)
+    interp = run_yo_interpreter(code)
+    assert interp.error_collector.has_errors()
+    assert any(isinstance(e, TypeMismatch) for e in interp.error_collector.errors)
 
 def test_error_division_by_zero():
     code = "say 10 / 0"
-    with pytest.raises(DivisionByZero):
-        run_yo(code)
+    interp = run_yo_interpreter(code)
+    assert interp.error_collector.has_errors()
+    assert any(isinstance(e, DivisionByZero) for e in interp.error_collector.errors)
+
+def test_multi_error_collection():
+    """Verify that multiple errors are collected in a single run."""
+    code = """say x
+say y
+make a = 10
+say a - "text"
+say z"""
+    interp = run_yo_interpreter(code)
+    assert interp.error_collector.count >= 3
+    # All errors should be present, sorted by line
+    report = interp.error_collector.format_report()
+    assert "Found" in report
+
+def test_error_cap_at_10():
+    """Verify that the error collector stops at MAX_ERRORS."""
+    lines = "\n".join(f"say var_{i}" for i in range(15))
+    interp = run_yo_interpreter(lines)
+    assert interp.error_collector.count == 10
+

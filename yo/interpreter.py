@@ -1,7 +1,7 @@
 import sys
 import importlib
 from typing import Any
-from .errors import YOError, UndefinedVariable, TypeMismatch, DivisionByZero
+from .errors import YOError, UndefinedVariable, TypeMismatch, DivisionByZero, ErrorCollector, MAX_ERRORS
 from .environment import Environment
 from .parser import (
     TaskDecl
@@ -32,6 +32,9 @@ def get_yo_type(val) -> str:
     return type(val).__name__
 
 class Interpreter:
+    def __init__(self):
+        self.error_collector = ErrorCollector()
+
     def evaluate(self, node: Any, env: Environment) -> Any:
         if node is None:
             return None
@@ -41,7 +44,12 @@ class Interpreter:
         if node_type == "Program":
             result = None
             for stmt in node.statements:
-                result = self.evaluate(stmt, env)
+                if self.error_collector.count >= MAX_ERRORS:
+                    break
+                try:
+                    result = self.evaluate(stmt, env)
+                except YOError as e:
+                    self.error_collector.add(e)
             return result
             
         elif node_type == "VarDecl":

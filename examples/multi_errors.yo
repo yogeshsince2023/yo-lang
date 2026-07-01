@@ -1,0 +1,8 @@
+# Test file with multiple errors
+say x
+say y
+make a = 10
+say a + "hello"
+make b = 5 / 0
+say z
+say w
